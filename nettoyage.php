@@ -28,7 +28,7 @@ foreach ($lignes as $ligne) {
     $tableau_propre[] = $cellules_nettoyee; // On met toutes no cellules dans un seul et meme tableau
 }
 
-$lignesDEPTS = file("DEPTS");
+$lignesDEPTS = file("/data/DEPTS");
 $nbDepts = count($lignesDEPTS);
 
 for ($i = 1; $i < $nbDepts; $i++) {
