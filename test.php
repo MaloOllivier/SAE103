@@ -56,6 +56,6 @@ foreach ($tableau_propre as $ligne_tab) {
 
 
 file_put_contents($fichier, implode("\n", $lignes_finales) . "\n");
-
+shell_exec("sort -t',' -k 2,2 -n $fichier -o $fichier");
 echo "$fichier a été nettoye.\n";
 ?>
