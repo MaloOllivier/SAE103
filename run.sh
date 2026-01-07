@@ -1,6 +1,6 @@
 #!/bin/bash
 # Logs
-LOGS="logs.txt"
+LOGS="../logs.txt"
 touch $LOGS
 # Image
 IMAGE="bigpapoo/sae103-excel2csv:latest"
@@ -26,9 +26,11 @@ for FICH in *.xlsx; do
   docker run --rm -v $VOLUME:/data $IMAGE sh -c "ssconvert \"/data/$FICH\" \"/data/$NOMFICH.csv\""
 
   echo "✓ \"$NOMFICH\" converti en csv"
+
+  docker run --rm -v $VOLUME:/data $IMAGE php /data/nettoyage.php /data/"$NOMFICH.csv"
+docker cp $TRANSFERT:/data/"$NOMFICH.csv" "$CHEMIN/resultat/" >> $LOGS
 done
 # faut recup le nom du fichier
-docker run --rm -v $VOLUME:/data $IMAGE php /data/nettoyage.php /data/$NOMFICH.csv
-docker cp $TRANSFERT:/data/"$NOMFICH.csv" "$CHEMIN/resultat/" >> $LOGS
+
 # Suppression du docker de TRANSFERT
 docker rm -f $TRANSFERT >> $LOGS
