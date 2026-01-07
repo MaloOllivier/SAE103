@@ -28,6 +28,24 @@ foreach ($lignes as $ligne) {
     $tableau_propre[] = $cellules_nettoyee; // On met toutes no cellules dans un seul et meme tableau
 }
 
+$lignesDEPTS = file("DEPTS");
+$nbDepts = count($lignesDEPTS);
+
+for ($i = 1; $i < $nbDepts; $i++) {
+    $trouve = false;
+
+    foreach ($tableau_propre as $ligne) {
+        if ($ligne[1] == $i || $i == 20) {
+            $trouve = true;
+            break;
+        }
+    }
+
+    if ($trouve == false) {
+        $tableau_propre[] = ["", $i, ""]; 
+    }
+}
+
 $lignes_finales = [];
 foreach ($tableau_propre as $ligne_tab) {
     // On remets les guillemets au debut et a la fin de la premiere case (nom du site)
