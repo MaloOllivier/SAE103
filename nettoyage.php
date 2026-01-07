@@ -66,7 +66,7 @@ file_put_contents($fichier, implode("\n", $lignes_finales) . "\n");
 
 shell_exec("sort -t',' -k 2,2 -n $fichier -o $fichier");
 
-// 1. On recharge le fichier trié dans un tableau propre
+// On recharge le fichier trié dans un tableau propre
 $lignes_triees = file($fichier);
 $tableau_final = [];
 
@@ -74,7 +74,7 @@ foreach ($lignes_triees as $ligne) {
     $ligne = rtrim($ligne);
     $cellules = explode(",", $ligne);
     
-    // 2. On vérifie la case du département (indice 1)
+    // On vérifie la case du département (indice 1)
     if ($cellules[1] == "20.1") {
         $cellules[1] = "2A";
     }

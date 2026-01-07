@@ -14,6 +14,7 @@ docker cp "DEPTS" $TRANSFERT:/data/"DEPTS" >> $LOGS
 docker cp "REGIONS" $TRANSFERT:/data/"REGIONS" >> $LOGS
 docker cp "nettoyage.php" $TRANSFERT:/data/nettoyage.php >> $LOGS
 ./Convertisseur_CSV.sh
+# faut recup le nom du fichier
 docker run --rm -v $VOLUME:/data $IMAGE php /data/nettoyage.php /data/test.csv
 docker cp $TRANSFERT:/data/"test.csv" "$CHEMIN" >> $LOGS
 # Suppression du docker de TRANSFERT
