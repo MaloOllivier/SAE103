@@ -5,7 +5,7 @@ VOLUME="SAE103_MALOOLLIVIER"
 # Image
 IMAGE="bigpapoo/sae103-html2pdf:latest"
 # Chemain du dossier
-CHEMAIN=$(pwd)
+CHEMIN=$(pwd)
 # Logs
 LOGS="logs.txt"
 # Creation du volume && du fichier LOGS
@@ -29,7 +29,7 @@ for FICH in *.html; do
   docker run --rm -v $VOLUME:/data $IMAGE sh -c "weasyprint \"/data/$FICH\" \"/data/$NOMFICH.pdf\""
 
   # Recuperation des fichiers convertis
-  docker cp $TRANSFERT:/data/"$NOMFICH.pdf" "$CHEMAIN" >> $LOGS
+  docker cp $TRANSFERT:/data/"$NOMFICH.pdf" "$CHEMIN" >> $LOGS
 
   echo "✓ \"$NOMFICH\" converti en pdf"
 done

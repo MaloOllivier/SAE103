@@ -5,7 +5,7 @@ VOLUME="SAE103_MALOOLLIVIER"
 # Image
 IMAGE="bigpapoo/sae103-excel2csv:latest"
 # Chemain du dossier
-CHEMAIN=$(pwd)
+CHEMIN=$(pwd)
 # Logs
 LOGS="logs.txt"
 # Creation du volume && du fichier LOGS
@@ -29,7 +29,7 @@ for FICH in *.xlsx; do
   docker run --rm -v $VOLUME:/data $IMAGE sh -c "ssconvert \"/data/$FICH\" \"/data/$NOMFICH.csv\""
 
   # Recuperation des fichiers convertis
-  docker cp $TRANSFERT:/data/"$NOMFICH.csv" "$CHEMAIN" >> $LOGS
+  # docker cp $TRANSFERT:/data/"$NOMFICH.csv" "$CHEMIN" >> $LOGS
 
   echo "✓ \"$NOMFICH\" converti en csv"
 done
