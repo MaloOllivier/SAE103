@@ -27,10 +27,10 @@ for FICH in *.xlsx; do
 
   echo "✓ \"$NOMFICH\" converti en csv"
 
-  docker run --rm -v $VOLUME:/data $IMAGE php /data/nettoyage.php /data/"$NOMFICH.csv"
+docker run --rm -v $VOLUME:/data $IMAGE php /data/nettoyage.php /data/"$NOMFICH.csv"
 docker cp $TRANSFERT:/data/"$NOMFICH.csv" "$CHEMIN/resultat/" >> $LOGS
 done
-# faut recup le nom du fichier
+
 
 # Suppression du docker de TRANSFERT
 docker rm -f $TRANSFERT >> $LOGS
