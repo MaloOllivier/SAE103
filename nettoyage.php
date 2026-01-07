@@ -28,6 +28,32 @@ foreach ($lignes as $ligne) {
     $tableau_propre[] = $cellules_nettoyee; // On met toutes no cellules dans un seul et meme tableau
 }
 
+$lignesDEPTS = file("DEPTS");
+$nbDepts = count($lignesDEPTS);
+
+for ($i = 1; $i < $nbDepts; $i++) {
+    $trouve = false;
+
+    foreach ($tableau_propre as $ligne) {
+        if ($ligne[1] == $i || $i == 20) {
+            $trouve = true;
+            break;
+        }
+    }
+
+    if ($trouve == false) {
+        $tableau_propre[] = ["", $i, ""]; 
+    }
+}
+
+foreach ($tableau_propre as $indice => $ligne) { 
+    if ($ligne[1] == "2A") {
+        $tableau_propre[$indice][1] = "20.1"; // On modifie directement dans le tableau principal
+    } elseif ($ligne[1] == "2B") {
+        $tableau_propre[$indice][1] = "20.2";
+    }
+}
+
 $lignes_finales = [];
 foreach ($tableau_propre as $ligne_tab) {
     // On remets les guillemets au debut et a la fin de la premiere case (nom du site)
@@ -36,8 +62,31 @@ foreach ($tableau_propre as $ligne_tab) {
     $lignes_finales[] = implode(",", $ligne_tab);
 }
 
-
 file_put_contents($fichier, implode("\n", $lignes_finales) . "\n");
 
+shell_exec("sort -t',' -k 2,2 -n $fichier -o $fichier");
+
+// 1. On recharge le fichier trié dans un tableau propre
+$lignes_triees = file($fichier);
+$tableau_final = [];
+
+foreach ($lignes_triees as $ligne) {
+    $ligne = rtrim($ligne);
+    $cellules = explode(",", $ligne);
+    
+    // 2. On vérifie la case du département (indice 1)
+    if ($cellules[1] == "20.1") {
+        $cellules[1] = "2A";
+    }
+    if ($cellules[1] == "20.2") {
+        $cellules[1] = "2B";
+    }
+    
+    // 3. On reconstruit la ligne et on l'ajoute au tableau final
+    $tableau_final[] = implode(",", $cellules);
+}
+
+// 4. On écrase le fichier avec les bonnes valeurs
+file_put_contents($fichier, implode("\n", $tableau_final));
 echo "$fichier a été nettoye.\n";
 ?>
