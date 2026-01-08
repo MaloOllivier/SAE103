@@ -19,20 +19,22 @@ for img in "$INPUT_DIR"/*.jpg; do
 
     echo "▶ Traitement de $filename"
 
+    # Conversion initiale avec sae103-imagick
     docker run --rm \
       -v "$SCRIPT_DIR/$INPUT_DIR:/data/in" \
       -v "$SCRIPT_DIR/$OUTPUT_DIR:/data/out" \
       sae103-imagick \
       "/data/in/$filename" \
-        -resize "${IMAGE_MAX_SIZE}>" \
-        -quality 90 \
-        "/data/out/$name.webp"
+      -resize "${IMAGE_MAX_SIZE}>" \
+      -quality 90 \
+      "/data/out/$name.webp"
 
     if [ ! -f "$OUTPUT_DIR/$name.webp" ]; then
         echo "❌ Conversion échouée pour $filename"
         continue
     fi
 
+    # Boucle pour réduire la qualité si nécessaire
     for q in 85 80 75 70 65; do
         size=$(stat -c%s "$OUTPUT_DIR/$name.webp")
         [ "$size" -le "$MAX_WEIGHT" ] && break
