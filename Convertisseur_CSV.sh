@@ -3,7 +3,7 @@
 # Nom du volume
 VOLUME="SAE103_MALOOLLIVIER"
 # Image
-IMAGE="bigpapoo/sae103-excel2csv:latest"
+IMAGE="sae103-excel2csv"
 # Chemain du dossier
 CHEMIN=$(pwd)
 # Logs
