@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 # Nom du volume
 VOLUME="SAE103_MALOOLLIVIER"
 # Image
-IMAGE="sae103-png2webp"
+IMAGE="sae103-imagick"
 # Chemain du dossier
 CHEMIN=$(pwd)
 # Logs
@@ -17,6 +17,7 @@ TRANSFERT="temporaire_$(date +%s%N)"
 docker run -dit --name $TRANSFERT -v $VOLUME:/data $IMAGE >> $LOGS
 
 # Boucle pour tous les fichiers en .webp présent dans le dossier
+cd fichiers/
 for FICH in *.png; do
   NOMFICH=$(basename "$FICH" .png)
   echo --------------
@@ -26,10 +27,10 @@ for FICH in *.png; do
   docker cp "$FICH" $TRANSFERT:/data/"$FICH" >> $LOGS
 
   # Conversion des png en webp
-  docker run --rm -v $VOLUME:/data $IMAGE sh -c "weasyprint \"/data/$FICH\" \"/data/$NOMFICH.webp\""
+  docker run --rm -v $VOLUME:/data $IMAGE sh -c "convert \"/data/$FICH\" \"/data/$NOMFICH.webp\""
 
   # Recuperation des fichiers convertis
-  docker cp $TRANSFERT:/data/"$NOMFICH.webp" "$CHEMIN" >> $LOGS
+  docker cp $TRANSFERT:/data/"$NOMFICH.webp" "$CHEMIN/resultat/" >> $LOGS
 
   echo "✓ \"$NOMFICH\" converti en webp"
 done
