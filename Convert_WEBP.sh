@@ -1,13 +1,14 @@
 #!/bin/bash
 
+shopt -s nullglob
+
 IMAGE_MAX_SIZE="900x620"
 MAX_WEIGHT=180000
 
 INPUT_DIR="fichiers"
 OUTPUT_DIR="resultat"
 
-
-for img in "$INPUT_DIR"/*; do
+for img in "$INPUT_DIR"/*.jpg; do
     filename=$(basename "$img")
     name="${filename%.*}"
 
