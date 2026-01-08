@@ -22,11 +22,11 @@ for img in "$INPUT_DIR"/*.jpg; do
     docker run --rm \
       -v "$SCRIPT_DIR/$INPUT_DIR:/data/in" \
       -v "$SCRIPT_DIR/$OUTPUT_DIR:/data/out" \
-      imagemagick \
-      magick "/data/in/$filename" \
-        -resize "${IMAGE_MAX_SIZE}>" \
-        -quality 90 \
-        "/data/out/$name.webp"
+      sae103-imagick \
+      "/data/in/$filename" \
+      -resize "${IMAGE_MAX_SIZE}>" \
+      -quality 90 \
+      "/data/out/$name.webp"
 
     if [ ! -f "$OUTPUT_DIR/$name.webp" ]; then
         echo "❌ Conversion échouée pour $filename"
@@ -39,10 +39,10 @@ for img in "$INPUT_DIR"/*.jpg; do
 
         docker run --rm \
           -v "$SCRIPT_DIR/$OUTPUT_DIR:/data/out" \
-          imagemagick \
-          magick "/data/out/$name.webp" \
-            -quality "$q" \
-            "/data/out/$name.webp"
+          sae103-imagick \
+          "/data/out/$name.webp" \
+          -quality "$q" \
+          "/data/out/$name.webp"
     done
 
     final_size=$(stat -c%s "$OUTPUT_DIR/$name.webp")
