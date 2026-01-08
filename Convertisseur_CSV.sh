@@ -17,6 +17,7 @@ TRANSFERT="temporaire_$(date +%s%N)"
 docker run -dit --name $TRANSFERT -v $VOLUME:/data $IMAGE >> $LOGS
 
 # Boucle pour tous les fichiers en .xlsx présent dans le dossier
+cd fichiers/
 for FICH in *.xlsx; do
   NOMFICH=$(basename "$FICH" .xlsx)
   echo --------------
@@ -28,10 +29,10 @@ for FICH in *.xlsx; do
   # Conversion des xlsx en csv
   docker run --rm -v $VOLUME:/data $IMAGE sh -c "ssconvert \"/data/$FICH\" \"/data/$NOMFICH.csv\""
 
-  # Recuperation des fichiers convertis
-  # docker cp $TRANSFERT:/data/"$NOMFICH.csv" "$CHEMIN" >> $LOGS
-
   echo "✓ \"$NOMFICH\" converti en csv"
+
+  docker run --rm -v $VOLUME:/data $IMAGE php /data/nettoyage.php /data/"$NOMFICH.csv"
+  docker cp $TRANSFERT:/data/"$NOMFICH.csv" "$CHEMIN/resultat/" >> $LOGS
 done
 
 # Suppression du docker de TRANSFERT
