@@ -15,11 +15,17 @@ mkdir -p "$OUTPUT_DIR"
 
 for img in "$INPUT_DIR"/*.jpg; do
     filename=$(basename "$img")
+
+    # remplacer les espaces par _
+    safe_filename="${filename// /_}"
+    if [ "$safe_filename" != "$filename" ]; then
+        mv "$INPUT_DIR/$filename" "$INPUT_DIR/$safe_filename"
+        filename="$safe_filename"
+    fi
     name="${filename%.*}"
 
     echo "▶ Traitement de $filename"
 
-    # Conversion initiale avec sae103-imagick
     docker run --rm \
       -v "$SCRIPT_DIR/$INPUT_DIR:/data/in" \
       -v "$SCRIPT_DIR/$OUTPUT_DIR:/data/out" \
@@ -34,7 +40,6 @@ for img in "$INPUT_DIR"/*.jpg; do
         continue
     fi
 
-    # Boucle pour réduire la qualité si nécessaire
     for q in 85 80 75 70 65; do
         size=$(stat -c%s "$OUTPUT_DIR/$name.webp")
         [ "$size" -le "$MAX_WEIGHT" ] && break
