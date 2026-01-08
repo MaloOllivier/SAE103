@@ -3,7 +3,7 @@
 # Nom du volume
 VOLUME="SAE103_MALOOLLIVIER"
 # Image
-IMAGE="sae103-html2pdf"
+IMAGE="sae103-png2webp"
 # Chemain du dossier
 CHEMIN=$(pwd)
 # Logs
@@ -16,26 +16,26 @@ echo "Malo OLLIVIER - IUT LANNION 2025-2026" > $LOGS
 TRANSFERT="temporaire_$(date +%s%N)"
 docker run -dit --name $TRANSFERT -v $VOLUME:/data $IMAGE >> $LOGS
 
-# Boucle pour tous les fichiers en .pdf présent dans le dossier
-for FICH in *.html; do
-  NOMFICH=$(basename "$FICH" .html)
+# Boucle pour tous les fichiers en .webp présent dans le dossier
+for FICH in *.png; do
+  NOMFICH=$(basename "$FICH" .png)
   echo --------------
-  echo "Conversion de '$FICH' --> '$NOMFICH.pdf'"
+  echo "Conversion de '$FICH' --> '$NOMFICH.webp'"
 
   # Copie du fichier dans le volume par l'intermidère du conteneur de transfert
   docker cp "$FICH" $TRANSFERT:/data/"$FICH" >> $LOGS
 
-  # Conversion des html en pdf
-  docker run --rm -v $VOLUME:/data $IMAGE sh -c "weasyprint \"/data/$FICH\" \"/data/$NOMFICH.pdf\""
+  # Conversion des png en webp
+  docker run --rm -v $VOLUME:/data $IMAGE sh -c "weasyprint \"/data/$FICH\" \"/data/$NOMFICH.webp\""
 
   # Recuperation des fichiers convertis
-  docker cp $TRANSFERT:/data/"$NOMFICH.pdf" "$CHEMIN" >> $LOGS
+  docker cp $TRANSFERT:/data/"$NOMFICH.webp" "$CHEMIN" >> $LOGS
 
-  echo "✓ \"$NOMFICH\" converti en pdf"
+  echo "✓ \"$NOMFICH\" converti en webp"
 done
 
 # Suppression du docker de TRANSFERT
 docker rm -f $TRANSFERT >> $LOGS
 
 echo --------------
-echo "Tous les fichiers .html ont été convertis !"
+echo "Tous les fichiers .png ont été convertis !"
