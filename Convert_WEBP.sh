@@ -3,10 +3,9 @@
 IMAGE_MAX_SIZE="900x620"
 MAX_WEIGHT=180000
 
-INPUT_DIR="input/images"
-OUTPUT_DIR="output/images_web"
+INPUT_DIR="fichiers"
+OUTPUT_DIR="resultat"
 
-mkdir -p "$OUTPUT_DIR"
 
 for img in "$INPUT_DIR"/*; do
     filename=$(basename "$img")
