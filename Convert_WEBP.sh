@@ -22,11 +22,11 @@ for img in "$INPUT_DIR"/*.jpg; do
     docker run --rm \
       -v "$SCRIPT_DIR/$INPUT_DIR:/data/in" \
       -v "$SCRIPT_DIR/$OUTPUT_DIR:/data/out" \
-      sae103-imagick \
-      "/data/in/$filename" \
-      -resize "${IMAGE_MAX_SIZE}>" \
-      -quality 90 \
-      "/data/out/$name.webp"
+      imagemagick \
+      magick "/data/in/$filename" \
+        -resize "${IMAGE_MAX_SIZE}>" \
+        -quality 90 \
+        "/data/out/$name.webp"
 
     if [ ! -f "$OUTPUT_DIR/$name.webp" ]; then
         echo "❌ Conversion échouée pour $filename"
