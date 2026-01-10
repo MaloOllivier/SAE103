@@ -5,13 +5,17 @@ $fichier = $argv[1];
 $lignes = file($fichier);
 
 $tab_html = [];
-foreach ($lignes as $ligne) {
-    $ligne = rtrim($ligne);
-    // On remets les guillemets au debut et a la fin de la premiere case (nom du site)
-    $ligne = '<p>' . $ligne . '<\p>';
-    // On fusionne les cellules en les séparant par des virgules
-    $tab_html[] = $ligne;
+foreach ($lignes as $i => $ligne) {
+    if($i == 0) {
+        $tab_html[] = '<h1>' . $ligne . '</h1>';
+    } else {
+        $ligne = rtrim($ligne);
+        // On remets les guillemets au debut et a la fin de la premiere case (nom du site)
+        $ligne = '<p>' . $ligne . '</p>';
+        // On fusionne les cellules en les séparant par des virgules
+        $tab_html[] = $ligne;
+    }
 }
 
-file_put_contents($fichier, implode("\n", $tab_html));
+file_put_contents("$fichier.html", implode("\n", $tab_html));
 ?>
