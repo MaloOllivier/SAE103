@@ -5,7 +5,7 @@ VOLUME="SAE103_MALOOLLIVIER"
 # Image
 IMAGE="bigpapoo/sae103-excel2csv"
 # Chemain du dossier
-CHEMIN=$(pwd)
+CHEMIN=$1
 # Logs
 LOGS="logs.txt"
 # Creation du volume && du fichier LOGS
@@ -17,7 +17,7 @@ TRANSFERT="temporaire_$(date +%s%N)"
 docker run -dit --name $TRANSFERT -v $VOLUME:/data $IMAGE >> $LOGS
 
 # Boucle pour tous les fichiers en .xlsx présent dans le dossier
-cd depot/
+cd $CHEMIN/depot
 for FICH in *.xlsx; do
   NOMFICH=$(basename "$FICH" .xlsx)
   echo --------------
@@ -30,7 +30,7 @@ for FICH in *.xlsx; do
   docker run --rm -v $VOLUME:/data $IMAGE sh -c "ssconvert \"/data/$FICH\" \"/data/$NOMFICH.csv\""
 
   echo "✓ \"$NOMFICH\" converti en csv"
-
+  echo "Nettoyage de '$FICH' ..."
   docker run --rm -v $VOLUME:/data $IMAGE php /data/nettoyage.php /data/"$NOMFICH.csv"
   docker cp $TRANSFERT:/data/"$NOMFICH.csv" "$CHEMIN/resultat/" >> $LOGS
 done

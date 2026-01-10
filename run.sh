@@ -11,10 +11,10 @@ CHEMIN=$(pwd)
 # docker image pull $IMAGE
 TRANSFERT="temporaire_$(date +%s%N)"
 docker run -dit --name $TRANSFERT -v $VOLUME:/data $IMAGE >> $LOGS
-docker cp "DEPTS" $TRANSFERT:/data/"DEPTS" >> $LOGS
-docker cp "REGIONS" $TRANSFERT:/data/"REGIONS" >> $LOGS
-docker cp "nettoyage.php" $TRANSFERT:/data/nettoyage.php >> $LOGS
-./Convertisseur_CSV.sh
+docker cp "data/DEPTS" $TRANSFERT:/data/"DEPTS" >> $LOGS
+docker cp "data/REGIONS" $TRANSFERT:/data/"REGIONS" >> $LOGS
+docker cp "scripts/nettoyage.php" $TRANSFERT:/data/nettoyage.php >> $LOGS
+./scripts/Convertisseur_CSV.sh $(pwd)
 
 # Suppression du docker de TRANSFERT
 docker rm -f $TRANSFERT >> $LOGS

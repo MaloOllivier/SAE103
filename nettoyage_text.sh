@@ -1,2 +1,0 @@
-sed 's/TITLE=//g' depot/presentation_musee_louvre | sed 's/SECT=//g' | sed 's/TEXT=//g' | sed 's/SUB_//g' > resultat/presentation_musee_louvre
-./text2html.php resultat/presentation_musee_louvre

@@ -88,5 +88,5 @@ foreach ($lignes_triees as $ligne) {
 
 // 4. On écrase le fichier avec les bonnes valeurs
 file_put_contents($fichier, implode("\n", $tableau_final));
-echo "$fichier a été nettoye.\n";
+echo "✓ $fichier a été nettoye.\n";
 ?>
