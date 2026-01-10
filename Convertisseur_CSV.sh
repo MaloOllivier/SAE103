@@ -3,7 +3,7 @@
 # Nom du volume
 VOLUME="SAE103_MALOOLLIVIER"
 # Image
-IMAGE="sae103-excel2csv"
+IMAGE="bigpapoo/sae103-excel2csv"
 # Chemain du dossier
 CHEMIN=$(pwd)
 # Logs
@@ -17,7 +17,7 @@ TRANSFERT="temporaire_$(date +%s%N)"
 docker run -dit --name $TRANSFERT -v $VOLUME:/data $IMAGE >> $LOGS
 
 # Boucle pour tous les fichiers en .xlsx présent dans le dossier
-cd fichiers/
+cd depot/
 for FICH in *.xlsx; do
   NOMFICH=$(basename "$FICH" .xlsx)
   echo --------------
