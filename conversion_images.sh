@@ -14,10 +14,15 @@ docker cp "$FICH" "$TRANSFERT:/data/$FICH" >> "$LOGS"
 NOMFICH=$(basename "$FICH" .jpg)
 
 # Dimensions de l'image
-DIMENSIONS=$(docker run --rm --entrypoint "" -v "$VOLUME:/data" "$IMAGE" identify -format '%wx%h' /data/$FICH)
+LARGEUR=$(docker run --rm --entrypoint "" -v "$VOLUME:/data" "$IMAGE" identify -format '%w' /data/$FICH)
+HAUTEUR=$(docker run --rm --entrypoint "" -v "$VOLUME:/data" "$IMAGE" identify -format '%h' /data/$FICH)
+echo "Les dimensions sont h: $HAUTEUR et l: $LARGEUR"
 
-echo "Les dimensions sont : $DIMENSIONS"
 
+HAUTEUR_FINAL
+
+docker run --rm --entrypoint "" -v "$VOLUME:/data" "$IMAGE" \
+    convert /data/$FICH -resize "${LARGEUR_FINAL}x${HAUTEUR_FINAL}" -quality 80 /data/$NOMFICH.webp
 
 # Conversion en webp avec la bonne taille
 docker run --rm --entrypoint "" -v "$VOLUME:/data" "$IMAGE" convert /data/$FICH -resize x620 -quality 80 /data/$NOMFICH.webp
