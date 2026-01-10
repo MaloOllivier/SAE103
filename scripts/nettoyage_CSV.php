@@ -10,6 +10,7 @@ $fichier = $argv[1];
 
 $lignes = file($fichier);
 
+// Suppression du titre et de l'entete
 array_shift($lignes);
 array_shift($lignes);
 array_shift($lignes);
@@ -27,7 +28,7 @@ foreach ($lignes as $ligne) {
     $tableau_propre[] = $cellules_nettoyee; // On met toutes no cellules dans un seul et meme tableau
 }
 
-$lignesDEPTS = file("DEPTS");
+$lignesDEPTS = file("/data/DEPTS");
 $nbDepts = count($lignesDEPTS);
 
 for ($i = 1; $i < $nbDepts; $i++) {
@@ -63,7 +64,7 @@ foreach ($tableau_propre as $ligne_tab) {
 
 file_put_contents($fichier, implode("\n", $lignes_finales) . "\n");
 
-shell_exec("sort -t',' -k 2,2 -n $fichier -o $fichier");
+shell_exec("sort -t',' -k 2,2 -n -r \"$fichier\" -o \"$fichier\"");
 
 // On recharge le fichier trié dans un tableau propre
 $lignes_triees = file($fichier);
@@ -81,11 +82,11 @@ foreach ($lignes_triees as $ligne) {
         $cellules[1] = "2B";
     }
     
-    // On reconstruit la ligne et on l'ajoute au tableau final
+    // 3. On reconstruit la ligne et on l'ajoute au tableau final
     $tableau_final[] = implode(",", $cellules);
 }
 
 // 4. On écrase le fichier avec les bonnes valeurs
 file_put_contents($fichier, implode("\n", $tableau_final));
-echo "$fichier a été nettoye.\n";
+echo "✓ $fichier a été nettoyé.\n";
 ?>

@@ -17,4 +17,5 @@ foreach ($lignes as $i => $ligne) {
 }
 
 file_put_contents("$fichier", implode("\n", $tab_html));
+echo "✓ $fichier a été transformer en html.\n";
 ?>

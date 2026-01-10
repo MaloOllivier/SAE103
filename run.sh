@@ -1,6 +1,6 @@
 #!/bin/bash
 # Logs
-LOGS="../logs.txt"
+LOGS="logs.txt"
 touch $LOGS
 # Image
 IMAGE="bigpapoo/sae103-excel2csv"
@@ -13,8 +13,9 @@ TRANSFERT="temporaire_$(date +%s%N)"
 docker run -dit --name $TRANSFERT -v $VOLUME:/data $IMAGE >> $LOGS
 docker cp "data/DEPTS" $TRANSFERT:/data/"DEPTS" >> $LOGS
 docker cp "data/REGIONS" $TRANSFERT:/data/"REGIONS" >> $LOGS
-docker cp "scripts/nettoyage.php" $TRANSFERT:/data/nettoyage.php >> $LOGS
+docker cp "scripts/nettoyage_CSV.php" $TRANSFERT:/data/nettoyage_CSV.php >> $LOGS
+docker cp "scripts/text2html.php" $TRANSFERT:/data/text2html.php >> $LOGS
 ./scripts/Convertisseur_CSV.sh $(pwd)
-
+./scripts/nettoyage_text.sh $(pwd) $IMAGE
 # Suppression du docker de TRANSFERT
 docker rm -f $TRANSFERT >> $LOGS

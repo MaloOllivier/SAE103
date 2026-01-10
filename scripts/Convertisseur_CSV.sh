@@ -7,10 +7,10 @@ IMAGE="bigpapoo/sae103-excel2csv"
 # Chemain du dossier
 CHEMIN=$1
 # Logs
-LOGS="logs.txt"
+LOGS="../logs.txt"
 # Creation du volume && du fichier LOGS
 docker volume create $VOLUME >> $LOGS
-echo "Malo OLLIVIER - IUT LANNION 2025-2026" > $LOGS
+echo "Malo OLLIVIER - IUT LANNION 2025-2026" >> $LOGS
 
 # Container de transfert pour copier tous les fichier
 TRANSFERT="temporaire_$(date +%s%N)"
@@ -31,11 +31,11 @@ for FICH in *.xlsx; do
 
   echo "✓ \"$NOMFICH\" converti en csv"
   echo "Nettoyage de '$FICH' ..."
-  docker run --rm -v $VOLUME:/data $IMAGE php /data/nettoyage.php /data/"$NOMFICH.csv"
+  docker run --rm -v $VOLUME:/data $IMAGE php /data/nettoyage_CSV.php /data/"$NOMFICH.csv"
   docker cp $TRANSFERT:/data/"$NOMFICH.csv" "$CHEMIN/resultat/" >> $LOGS
 done
 
-# Suppression du docker de TRANSFERT
+# Suppression du container de TRANSFERT
 docker rm -f $TRANSFERT >> $LOGS
 
 echo --------------
