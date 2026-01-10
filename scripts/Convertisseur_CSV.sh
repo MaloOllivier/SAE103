@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Nom du volume
-VOLUME="SAE103_MALOOLLIVIER"
+VOLUME=$3
 # Image
-IMAGE="bigpapoo/sae103-excel2csv"
+IMAGE=$2
 # Chemain du dossier
 CHEMIN=$1
 # Logs
