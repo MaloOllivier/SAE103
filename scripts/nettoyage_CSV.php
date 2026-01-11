@@ -1,11 +1,6 @@
 #!/bin/php
 <?php
 
-if ($argc < 2) {
-    echo "Usage : nettoyage.php fichier.csv\n";
-    exit(1);
-}
-
 $fichier = $argv[1];
 
 $lignes = file($fichier);
@@ -56,8 +51,6 @@ foreach ($tableau_propre as $indice => $ligne) {
 
 $lignes_finales = [];
 foreach ($tableau_propre as $ligne_tab) {
-    // On remets les guillemets au debut et a la fin de la premiere case (nom du site)
-    $ligne_tab[0] = '"' . $ligne_tab[0] . '"';
     // On fusionne les cellules en les séparant par des virgules
     $lignes_finales[] = implode(",", $ligne_tab);
 }
@@ -66,7 +59,7 @@ file_put_contents($fichier, implode("\n", $lignes_finales) . "\n");
 
 shell_exec("sort -t',' -k 2,2 -n -r \"$fichier\" -o \"$fichier\"");
 
-// On recharge le fichier trié dans un tableau propre
+// On mets le fichier trié dans un tableau propre
 $lignes_triees = file($fichier);
 $tableau_final = [];
 
@@ -74,7 +67,7 @@ foreach ($lignes_triees as $ligne) {
     $ligne = rtrim($ligne);
     $cellules = explode(",", $ligne);
     
-    // On vérifie la case du département (indice 1)
+    // On remets les bons departements
     if ($cellules[1] == "20.1") {
         $cellules[1] = "2A";
     }
@@ -82,11 +75,10 @@ foreach ($lignes_triees as $ligne) {
         $cellules[1] = "2B";
     }
     
-    // 3. On reconstruit la ligne et on l'ajoute au tableau final
     $tableau_final[] = implode(",", $cellules);
 }
 
-// 4. On écrase le fichier avec les bonnes valeurs
+// On enregistre
 file_put_contents($fichier, implode("\n", $tableau_final));
 echo "✓ $fichier a été nettoyé.\n";
 ?>

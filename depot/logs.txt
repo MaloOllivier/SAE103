@@ -17,3 +17,6 @@ temporaire_1768058788466277261
 temporaire_1768058863502673539
 temporaire_1768128195308569576
 temporaire_1768128283872157466
+identify-im6.q16: CorruptImageProfile `/data/place-stanilslas.webp' (XMP) @ warning/profile.c/ValidateXMPProfile/1675.
+identify-im6.q16: CorruptImageProfile `/data/place-stanilslas.webp' (XMP) @ warning/profile.c/ValidateXMPProfile/1675.
+temporaire_1768153769717410496

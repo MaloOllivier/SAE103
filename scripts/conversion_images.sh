@@ -1,13 +1,13 @@
-CHEMIN=$(pwd)
-LOGS="../logs.txt"
+CHEMIN=$1
+LOGS="logs.txt"
 IMAGE="bigpapoo/sae103-imagick"
-VOLUME="SAE103_MALOOLLIVIER"
+VOLUME=$2
 
 TRANSFERT="temporaire_$(date +%s%N)"
 
 # Container de transfert
 docker run -dit --name "$TRANSFERT" -v "$VOLUME:/data" "$IMAGE" >> "$LOGS"
-cd depot/
+cd $CHEMIN/depot/
 
 for FICH in *.jpg; do
     docker cp "$FICH" "$TRANSFERT:/data/$FICH" >> "$LOGS"
@@ -23,7 +23,7 @@ for FICH in *.jpg; do
     L_MAX=900
     H_MIN=250
     L_MIN=350
-    if [ $LARGEUR -gt $L_MAX ] || [ $HAUTEUR -gt $H_MAX ]; then
+    if [ $LARGEUR -gt $L_MAX ] || [ $HAUTEUR -gt $H_MAX ]; then # retrecis l'image si elle est trop grande
         # Calcul du ratio pour respecter les dimensions
 
         RATIO_L=$(( $L_MAX * 100000 / LARGEUR ))
@@ -43,7 +43,7 @@ for FICH in *.jpg; do
 
         # Conversion en webp avec la bonne taille et une qualité réduite
         docker run --rm --entrypoint "" -v "$VOLUME:/data" "$IMAGE" convert /data/$FICH -resize "${L_FINAL}x${H_FINAL}" /data/$NOMFICH.webp
-    elif [ $LARGEUR -lt $L_MIN ] || [ $HAUTEUR -lt $H_MIN ]; then
+    elif [ $LARGEUR -lt $L_MIN ] || [ $HAUTEUR -lt $H_MIN ]; then # agrandis l'image si elle est trop grande
         # Calcul du ratio pour respecter les dimensions
 
         RATIO_L=$(( $L_MIN * 100000 / LARGEUR ))
@@ -61,18 +61,26 @@ for FICH in *.jpg; do
         H_FINAL=$(( $HAUTEUR * $RATIO / 100000 ))
         echo "Les nouvelles dimensions sont h: $H_FINAL et l: $L_FINAL"
 
-        # Conversion en webp avec la bonne taille et une qualité réduite
+        # Conversion en webp avec la bonne taille
         docker run --rm --entrypoint "" -v "$VOLUME:/data" "$IMAGE" convert /data/$FICH -resize "${L_FINAL}x${H_FINAL}" /data/$NOMFICH.webp
+    else
+        docker run --rm --entrypoint "" -v "$VOLUME:/data" "$IMAGE" convert /data/$FICH /data/$NOMFICH.webp
     fi
     echo "✓ \"$FICH\" converti en webp"
+    # Baisse de la qualité si necessaire
     T_MAX=180000
     SIZE=$(docker run --rm --entrypoint "" -v "$VOLUME:/data" "$IMAGE" sh -c "stat -c %s /data/$NOMFICH.webp")
     if [ $SIZE -gt $T_MAX ]; then
         POURCENTAGE_QUALITE=$(( $T_MAX * 100 / $SIZE ))
+        echo "$NOMFICH.webp trop lourd, baisse de la qualité à : ${POURCENTAGE_QUALITE} %"
         docker run --rm --entrypoint "" -v "$VOLUME:/data" "$IMAGE" convert /data/$NOMFICH.webp -quality $POURCENTAGE_QUALITE /data/$NOMFICH.webp
     fi
     docker cp "$TRANSFERT:/data/$NOMFICH.webp" "$CHEMIN/resultat/" >> "$LOGS"
 done
+
+
+
+
 
 for FICH in *.png; do
     docker cp "$FICH" "$TRANSFERT:/data/$FICH" >> "$LOGS"
@@ -126,17 +134,93 @@ for FICH in *.png; do
         H_FINAL=$(( $HAUTEUR * $RATIO / 100000 ))
         echo "Les nouvelles dimensions sont h: $H_FINAL et l: $L_FINAL"
 
-        # Conversion en webp avec la bonne taille et une qualité réduite
+        # Conversion en webp avec la bonne taille
         docker run --rm --entrypoint "" -v "$VOLUME:/data" "$IMAGE" convert /data/$FICH -resize "${L_FINAL}x${H_FINAL}" /data/$NOMFICH.webp
+    else
+        docker run --rm --entrypoint "" -v "$VOLUME:/data" "$IMAGE" convert /data/$FICH /data/$NOMFICH.webp
     fi
     echo "✓ \"$FICH\" converti en webp"
+    # Baisse de la qualité si necessaire
     T_MAX=180000
     SIZE=$(docker run --rm --entrypoint "" -v "$VOLUME:/data" "$IMAGE" sh -c "stat -c %s /data/$NOMFICH.webp")
     if [ $SIZE -gt $T_MAX ]; then
         POURCENTAGE_QUALITE=$(( $T_MAX * 100 / $SIZE ))
+        echo "$NOMFICH.webp trop lourd, baisse de la qualité à : ${POURCENTAGE_QUALITE} %"
         docker run --rm --entrypoint "" -v "$VOLUME:/data" "$IMAGE" convert /data/$NOMFICH.webp -quality $POURCENTAGE_QUALITE /data/$NOMFICH.webp
     fi
     docker cp "$TRANSFERT:/data/$NOMFICH.webp" "$CHEMIN/resultat/" >> "$LOGS"
 done
 
+
+
+
+
+for FICH in *.webp; do
+    docker cp "$FICH" "$TRANSFERT:/data/$FICH" >> "$LOGS"
+    echo --------------
+    echo "Redimensionnement de '$FICH' ...'"
+
+    # Dimensions de l'image
+    LARGEUR=$(docker run --rm --entrypoint "" -v "$VOLUME:/data" "$IMAGE" identify -format '%w' /data/$FICH 2>> $LOGS) 
+    HAUTEUR=$(docker run --rm --entrypoint "" -v "$VOLUME:/data" "$IMAGE" identify -format '%h' /data/$FICH 2>> $LOGS) 
+    echo "Les dimensions sont h: $HAUTEUR et l: $LARGEUR"
+    H_MAX=620
+    L_MAX=900
+    H_MIN=250
+    L_MIN=350
+    if [ $LARGEUR -gt $L_MAX ] || [ $HAUTEUR -gt $H_MAX ]; then
+        # Calcul du ratio pour respecter les dimensions
+
+        RATIO_L=$(( $L_MAX * 100000 / LARGEUR ))
+        RATIO_H=$(( $H_MAX * 100000 / HAUTEUR ))
+
+        # Comparer pour prendre le plus petit
+        if [ $RATIO_L -lt $RATIO_H ]; then
+            RATIO=$RATIO_L
+        else
+            RATIO=$RATIO_H
+        fi
+
+        # Nouvelle largeur et hauteur
+        L_FINAL=$(( $LARGEUR * $RATIO / 100000 ))
+        H_FINAL=$(( $HAUTEUR * $RATIO / 100000 ))
+        echo "Les nouvelles dimensions sont h: $H_FINAL et l: $L_FINAL"
+
+        # Conversion en webp avec la bonne taille et une qualité réduite
+        docker run --rm --entrypoint "" -v "$VOLUME:/data" "$IMAGE" convert /data/$FICH -resize "${L_FINAL}x${H_FINAL}" /data/$FICH
+    elif [ $LARGEUR -lt $L_MIN ] || [ $HAUTEUR -lt $H_MIN ]; then
+        # Calcul du ratio pour respecter les dimensions
+
+        RATIO_L=$(( $L_MIN * 100000 / LARGEUR ))
+        RATIO_H=$(( $H_MIN * 100000 / HAUTEUR ))
+
+        # Comparer pour prendre le plus grand
+        if [ $RATIO_L -gt $RATIO_H ]; then
+            RATIO=$RATIO_L
+        else
+            RATIO=$RATIO_H
+        fi
+
+        # Nouvelle largeur et hauteur
+        L_FINAL=$(( $LARGEUR * $RATIO / 100000 ))
+        H_FINAL=$(( $HAUTEUR * $RATIO / 100000 ))
+        echo "Les nouvelles dimensions sont h: $H_FINAL et l: $L_FINAL"
+
+        # Conversion en webp avec la bonne taille
+        docker run --rm --entrypoint "" -v "$VOLUME:/data" "$IMAGE" convert /data/$FICH -resize "${L_FINAL}x${H_FINAL}" /data/$FICH
+    fi
+    echo "✓ \"$FICH\" converti en webp"
+    # Baisse de la qualité si necessaire
+    T_MAX=180000
+    SIZE=$(docker run --rm --entrypoint "" -v "$VOLUME:/data" "$IMAGE" sh -c "stat -c %s /data/$FICH")
+    if [ $SIZE -gt $T_MAX ]; then
+        POURCENTAGE_QUALITE=$(( $T_MAX * 100 / $SIZE ))
+        echo "$FICH trop lourd, baisse de la qualité à : ${POURCENTAGE_QUALITE} %"
+        docker run --rm --entrypoint "" -v "$VOLUME:/data" "$IMAGE" convert /data/$FICH -quality $POURCENTAGE_QUALITE /data/$FICH
+    fi
+    docker cp "$TRANSFERT:/data/$FICH" "$CHEMIN/resultat/" >> "$LOGS"
+done
+
+echo --------------
+echo "Toutes les images ont été convertis !"
 docker rm -f "$TRANSFERT" >> "$LOGS"
