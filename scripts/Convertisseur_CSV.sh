@@ -7,7 +7,7 @@ IMAGE=$2
 # Chemain du dossier
 CHEMIN=$1
 # Logs
-LOGS="../logs.txt"
+LOGS="logs.txt"
 # Creation du volume && du fichier LOGS
 docker volume create $VOLUME >> $LOGS
 echo "Malo OLLIVIER - IUT LANNION 2025-2026" >> $LOGS
