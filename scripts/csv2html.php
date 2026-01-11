@@ -5,8 +5,8 @@ $NOMFICH = $argv[2];
 
 //lecture du fichier
 $lignes = file($fichier);
-
-$html = "<table border='1'; width: 100%;'>\n";
+$html = "<body>\n";
+$html .= "<table border='1'; width: 100%;'>\n";
 
 foreach ($lignes as $index => $ligne) {
     $cellules = explode(",", $ligne);
@@ -21,8 +21,8 @@ foreach ($lignes as $index => $ligne) {
     }
     $html .= "  </tr>\n";
 }
-$html .= "</table>";
-
+$html .= "</table>\n";
+$html .= "</body>";
 // enregistrement en html
 $FICH_HTML = "/data/" . $NOMFICH . ".html";
 file_put_contents($FICH_HTML, $html);

@@ -37,6 +37,7 @@ for FICH in *.xlsx; do
   docker cp $TRANSFERT:/data/"$NOMFICH.csv" "$CHEMIN/resultat/" >> $LOGS
 
   # Ajout de l'entete
+  sort -t',' -k 4,4 -n "$CHEMIN/resultat/$NOMFICH.csv" -o "$CHEMIN/resultat/$NOMFICH.csv"
   sed -i '1iNom du site,Nom du Departement,Code du departement,Visiteurs annuels' "$CHEMIN/resultat/$NOMFICH.csv"
   
   docker cp "$CHEMIN/resultat/$NOMFICH.csv" $TRANSFERT:/data/"$NOMFICH.csv" >> $LOGS
