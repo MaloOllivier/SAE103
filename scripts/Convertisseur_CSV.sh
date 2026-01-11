@@ -36,13 +36,24 @@ for FICH in *.xlsx; do
   docker run --rm -v $VOLUME:/data $IMAGE php /data/nettoyage_CSV.php /data/"$NOMFICH.csv"
   docker cp $TRANSFERT:/data/"$NOMFICH.csv" "$CHEMIN/resultat/" >> $LOGS
 
-  # Ajout de l'entete
-  sort -t',' -k 4,4 -n "$CHEMIN/resultat/$NOMFICH.csv" -o "$CHEMIN/resultat/$NOMFICH.csv"
-  sed -i '1iNom du site,Nom du Departement,Code du departement,Visiteurs annuels' "$CHEMIN/resultat/$NOMFICH.csv"
+
+  # Version sites-visites.csv
+  sort -t',' -k 4,4 -n "$CHEMIN/resultat/$NOMFICH.csv" > "$CHEMIN/resultat/sites-visites.csv"
+  sed -i '1iNom du site,Nom du Departement,Code du departement,Visiteurs annuels' "$CHEMIN/resultat/sites-visites.csv"
+  docker cp "$CHEMIN/resultat/sites-visites.csv" $TRANSFERT:/data/sites-visites.csv >> $LOGS
+  docker run --rm -v $VOLUME:/data $IMAGE php /data/csv2html.php "/data/sites-visites.csv" "sites-visites"
+  docker cp $TRANSFERT:/data/sites-visites.html "$CHEMIN/resultat/" >> $LOGS
+  rm "$CHEMIN/resultat/sites-visites.csv"
+
+  # Version sites-dept.csv
+  cat "$CHEMIN/resultat/$NOMFICH.csv" > "$CHEMIN/resultat/sites-dept.csv"
+  sed -i '1iNom du site,Nom du Departement,Code du departement,Visiteurs annuels' "$CHEMIN/resultat/sites-dept.csv"
   
-  docker cp "$CHEMIN/resultat/$NOMFICH.csv" $TRANSFERT:/data/"$NOMFICH.csv" >> $LOGS
-  docker run --rm -v $VOLUME:/data $IMAGE php /data/csv2html.php "/data/$NOMFICH.csv" "$NOMFICH"
-  docker cp $TRANSFERT:/data/"$NOMFICH.html" "$CHEMIN/resultat/" >> $LOGS
+  docker cp "$CHEMIN/resultat/sites-dept.csv" $TRANSFERT:/data/sites-dept.csv >> $LOGS
+  docker run --rm -v $VOLUME:/data $IMAGE php /data/csv2html.php "/data/sites-dept.csv" "sites-dept"
+  docker cp $TRANSFERT:/data/sites-dept.html "$CHEMIN/resultat/" >> $LOGS
+  #rm "$CHEMIN/resultat/sites-dept.csv"
+  rm "$CHEMIN/resultat/$NOMFICH.csv"
 done
 
 # Suppression du container de TRANSFERT
