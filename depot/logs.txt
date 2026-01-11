@@ -26,3 +26,11 @@ temporaire_1768154161057071150
 identify-im6.q16: CorruptImageProfile `/data/place-stanilslas.webp' (XMP) @ warning/profile.c/ValidateXMPProfile/1675.
 identify-im6.q16: CorruptImageProfile `/data/place-stanilslas.webp' (XMP) @ warning/profile.c/ValidateXMPProfile/1675.
 temporaire_1768154407562911667
+temporaire_1768154551251416055
+identify-im6.q16: CorruptImageProfile `/data/place-stanilslas.webp' (XMP) @ warning/profile.c/ValidateXMPProfile/1675.
+identify-im6.q16: CorruptImageProfile `/data/place-stanilslas.webp' (XMP) @ warning/profile.c/ValidateXMPProfile/1675.
+temporaire_1768154556644174496
+temporaire_1768154651274685746
+identify-im6.q16: CorruptImageProfile `/data/place-stanilslas.webp' (XMP) @ warning/profile.c/ValidateXMPProfile/1675.
+identify-im6.q16: CorruptImageProfile `/data/place-stanilslas.webp' (XMP) @ warning/profile.c/ValidateXMPProfile/1675.
+temporaire_1768154658403029683

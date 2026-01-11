@@ -10,12 +10,13 @@ CHEMIN=$1
 LOGS="logs.txt"
 # Creation du volume && du fichier LOGS
 docker volume create $VOLUME >> $LOGS
-echo "Malo OLLIVIER - IUT LANNION 2025-2026" >> $LOGS
 
 # Container de transfert pour copier tous les fichier
 TRANSFERT="temporaire_$(date +%s%N)"
 docker run -dit --name $TRANSFERT -v $VOLUME:/data $IMAGE >> $LOGS
 
+docker cp "scripts/nettoyage_CSV.php" $TRANSFERT:/data/nettoyage_CSV.php >> $LOGS
+docker cp "scripts/text2html.php" $TRANSFERT:/data/text2html.php >> $LOGS
 # Boucle pour tous les fichiers en .xlsx présent dans le dossier
 cd $CHEMIN/depot
 for FICH in *.xlsx; do
