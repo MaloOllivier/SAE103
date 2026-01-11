@@ -1,5 +1,5 @@
 CHEMIN=$1
-LOGS="logs.txt"
+LOGS="$CHEMIN/scripts/logs.txt"
 IMAGE="bigpapoo/sae103-imagick"
 VOLUME=$2
 

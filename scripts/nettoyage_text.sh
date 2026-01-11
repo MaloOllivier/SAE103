@@ -1,6 +1,6 @@
 FICH="presentation_musee_louvre"
 CHEMIN=$1
-LOGS="logs.txt"
+LOGS="$CHEMIN/scripts/logs.txt"
 IMAGE=$2
 VOLUME=$3
 echo --------------

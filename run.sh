@@ -13,6 +13,7 @@ TRANSFERT="temporaire_$(date +%s%N)"
 docker run -dit --name $TRANSFERT -v $VOLUME:/data $IMAGE >> $LOGS
 docker cp "data/DEPTS" $TRANSFERT:/data/"DEPTS" >> $LOGS
 docker cp "data/REGIONS" $TRANSFERT:/data/"REGIONS" >> $LOGS
+docker cp "scripts/text2html.php" $TRANSFERT:/data/text2html.php >> $LOGS
 ./scripts/Convertisseur_CSV.sh $(pwd) $IMAGE $VOLUME
 ./scripts/nettoyage_text.sh $(pwd) $IMAGE $VOLUME
 ./scripts/conversion_images.sh $(pwd) $VOLUME
