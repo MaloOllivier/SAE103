@@ -52,7 +52,7 @@ for FICH in *.xlsx; do
   docker cp "$CHEMIN/resultat/sites-dept.csv" $TRANSFERT:/data/sites-dept.csv >> $LOGS
   docker run --rm -v $VOLUME:/data $IMAGE php /data/csv2html.php "/data/sites-dept.csv" "sites-dept"
   docker cp $TRANSFERT:/data/sites-dept.html "$CHEMIN/resultat/" >> $LOGS
-  #rm "$CHEMIN/resultat/sites-dept.csv"
+  rm "$CHEMIN/resultat/sites-dept.csv"
   rm "$CHEMIN/resultat/$NOMFICH.csv"
 done
 
