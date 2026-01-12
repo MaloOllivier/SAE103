@@ -1,6 +1,6 @@
 CHEMIN=$1
 LOGS="$CHEMIN/scripts/logs.txt"
-IMAGE="bigpapoo/sae103-imagick"
+IMAGE="sae103-imagick"
 VOLUME=$2
 
 TRANSFERT="temporaire_$(date +%s%N)"

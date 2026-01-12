@@ -3,7 +3,7 @@
 LOGS="scripts/logs.txt"
 touch $LOGS
 # Image
-IMAGE="bigpapoo/sae103-excel2csv"
+IMAGE="sae103-excel2csv"
 # Nom du volume
 VOLUME="SAE103_MALOOLLIVIER"
 CHEMIN=$(pwd)
