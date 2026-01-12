@@ -16,6 +16,7 @@ docker cp "data/REGIONS" $TRANSFERT:/data/"REGIONS" >> $LOGS
 docker cp "scripts/text2html.php" $TRANSFERT:/data/text2html.php >> $LOGS
 ./scripts/Convertisseur_CSV.sh $(pwd) $IMAGE $VOLUME
 ./scripts/nettoyage_text.sh $(pwd) $IMAGE $VOLUME
+./scripts/Convertisseur_PDF.sh $(pwd) $VOLUME
 ./scripts/conversion_images.sh $(pwd) $VOLUME
 # Suppression du docker de TRANSFERT
 docker rm -f $TRANSFERT >> $LOGS

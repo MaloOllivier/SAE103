@@ -5,8 +5,42 @@ $NOMFICH = $argv[2];
 
 //lecture du fichier
 $lignes = file($fichier);
-$html = "<body>\n";
-$html .= "<table border='1'; width: 100%;'>\n";
+$html = "
+<head>
+    <meta charset='UTF-8'>
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 0.5cm;
+        }
+        body{margin: 0;}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        th, td{
+            border: 1px solid black;
+            padding: 3px;
+            font-size: 8px;
+            line-height: 0.9;
+            word-wrap: break-word;
+        }
+        th{
+          background-color: #ccc;
+        }
+        .Separation {
+            column-count: 2;
+            column-gap: 40px;
+            column-rule: 1px solid #ccc;
+            height: 21cm;
+        }
+    </style>
+</head>
+
+<body>\n";
+$html .= "<div class=\"Separation\">";
+$html .= "<table>\n";
 
 foreach ($lignes as $index => $ligne) {
     $cellules = explode(",", $ligne);
@@ -14,15 +48,16 @@ foreach ($lignes as $index => $ligne) {
     
     foreach ($cellules as $cellule) {
         if ($index === 0) {
-            $html .= "    <th style='background-color: #d3d3d3ff; padding: 1em;'>" . htmlspecialchars($cellule) . "</th>\n";
+            $html .= "    <th>" . htmlspecialchars($cellule) . "</th>\n";
         } else {
-            $html .= "    <td style='padding: 1em;'>" . htmlspecialchars($cellule) . "</td>\n";
+            $html .= "    <td>" . htmlspecialchars($cellule) . "</td>\n";
         }
     }
     $html .= "  </tr>\n";
 }
 $html .= "</table>\n";
-$html .= "</body>";
+$html .= "</div>\n";
+$html .= "</body>\n";
 // enregistrement en html
 $FICH_HTML = "/data/" . $NOMFICH . ".html";
 file_put_contents($FICH_HTML, $html);
