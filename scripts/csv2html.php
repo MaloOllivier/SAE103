@@ -21,7 +21,7 @@ $html = "
         }
         th, td{
             border: 1px solid black;
-            padding: 3px;
+            padding: 2px;
             font-size: 8px;
             line-height: 0.9;
             word-wrap: break-word;
@@ -33,12 +33,18 @@ $html = "
             column-count: 2;
             column-gap: 40px;
             column-rule: 1px solid #ccc;
-            height: 21cm;
+            
         }
     </style>
 </head>
 
 <body>\n";
+if($NOMFICH == "sites-dept"){
+    $html .= "<h1> Sites de visites par département </h1>";
+}
+else if($NOMFICH == "sites-visites"){
+    $html .= "<h1> Sites de visites par nombre de visites annuels </h1>";
+}
 $html .= "<div class=\"Separation\">";
 $html .= "<table>\n";
 

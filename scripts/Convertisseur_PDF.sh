@@ -32,7 +32,7 @@ for FICH in *.html; do
   docker cp $TRANSFERT:/data/"$NOMFICH.pdf" "$CHEMIN/resultat" >> $LOGS
 
   echo "✓ \"$NOMFICH\" converti en pdf"
-  #rm $CHEMIN/resultat/$FICH
+  rm $CHEMIN/resultat/$FICH
 done
 
 # Suppression du docker de TRANSFERT
